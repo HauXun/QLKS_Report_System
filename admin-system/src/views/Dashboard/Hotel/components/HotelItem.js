@@ -1,19 +1,57 @@
 import {
 	Avatar,
-	Button,
 	Flex,
-	Icon,
 	Td,
 	Text,
 	Tr,
 	useColorModeValue,
 } from "@chakra-ui/react";
-import { FaEllipsisV } from "react-icons/fa";
+import { SplitButton } from "primereact/splitbutton";
+
 import React from "react";
 
 function HotelItem(props) {
 	const { logo, name, address } = props;
 	const textColor = useColorModeValue("gray.700", "white");
+
+	const items = [
+		{
+			label: "Update",
+			icon: "pi pi-refresh",
+			command: () => {
+				toast.current.show({
+					severity: "success",
+					summary: "Updated",
+					detail: "Data Updated",
+				});
+			},
+		},
+		{
+			label: "Delete",
+			icon: "pi pi-times",
+			command: () => {
+				toast.current.show({
+					severity: "warn",
+					summary: "Delete",
+					detail: "Data Deleted",
+				});
+			},
+		},
+		{
+			label: "React Website",
+			icon: "pi pi-external-link",
+			command: () => {
+				window.location.href = "https://reactjs.org/";
+			},
+		},
+		{
+			label: "Upload",
+			icon: "pi pi-upload",
+			command: () => {
+				//router.push('/fileupload');
+			},
+		},
+	];
 
 	return (
 		<Tr>
@@ -36,9 +74,11 @@ function HotelItem(props) {
 				</Flex>
 			</Td>
 			<Td>
-				<Button p="0px" bg="transparent">
-					<Icon as={FaEllipsisV} color="gray.400" cursor="pointer" />
-				</Button>
+				<SplitButton
+					label="Tùy chọn"
+					icon="pi pi-plus"
+					model={items}
+				/>
 			</Td>
 		</Tr>
 	);
