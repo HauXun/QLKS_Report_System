@@ -9,46 +9,60 @@ import {
 import { SplitButton } from "primereact/splitbutton";
 
 import React from "react";
+import PropTypes from "prop-types";
 
-function HotelItem(props) {
-	const { logo, name, address } = props;
+HotelItem.propTypes = {
+	onOpenDialog: PropTypes.func,
+};
+
+HotelItem.defaultProps = {
+	onOpenDialog: () => {},
+};
+
+function HotelItem({ logo, name, address, onOpenDialog }) {
 	const textColor = useColorModeValue("gray.700", "white");
 
-	const items = [
+	const actions = [
 		{
-			label: "Update",
-			icon: "pi pi-refresh",
+			label: "Doanh thu",
+			icon: "pi pi-cart-plus",
 			command: () => {
-				toast.current.show({
-					severity: "success",
-					summary: "Updated",
-					detail: "Data Updated",
-				});
+				onOpenDialog("RevenueDialog");
 			},
 		},
 		{
-			label: "Delete",
-			icon: "pi pi-times",
+			label: "Chi phí",
+			icon: "pi pi-calculator",
 			command: () => {
-				toast.current.show({
-					severity: "warn",
-					summary: "Delete",
-					detail: "Data Deleted",
-				});
+				onOpenDialog("RevenueDialog");
 			},
 		},
 		{
-			label: "React Website",
-			icon: "pi pi-external-link",
+			label: "Đánh giá",
+			icon: "pi pi-star",
 			command: () => {
-				window.location.href = "https://reactjs.org/";
+				onOpenDialog("RevenueDialog");
 			},
 		},
 		{
-			label: "Upload",
-			icon: "pi pi-upload",
+			label: "Khách hàng",
+			icon: "pi pi-user",
 			command: () => {
-				//router.push('/fileupload');
+				onOpenDialog("RevenueDialog");
+			},
+		},
+		{
+			label: "Nhân viên",
+			icon: "pi pi-users",
+			command: () => {
+				onOpenDialog("RevenueDialog");
+			},
+		},
+		{
+			label: "Phòng",
+			icon: "pi pi-stop",
+			command: () => {
+				onOpenDialog("RevenueDialog");
 			},
 		},
 	];
@@ -77,7 +91,9 @@ function HotelItem(props) {
 				<SplitButton
 					label="Tùy chọn"
 					icon="pi pi-plus"
-					model={items}
+					model={actions}
+					outlined
+					size="small"
 				/>
 			</Td>
 		</Tr>

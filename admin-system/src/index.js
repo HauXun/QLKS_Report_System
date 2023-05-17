@@ -25,6 +25,7 @@ import AdminLayout from "layouts/Admin.js";
 // PrimeReact styles
 import "primereact/resources/themes/lara-light-indigo/theme.css";
 import "primereact/resources/primereact.min.css";
+import "primeicons/primeicons.css";
 
 ReactDOM.render(
 	<HashRouter>

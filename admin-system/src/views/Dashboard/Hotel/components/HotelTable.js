@@ -12,13 +12,42 @@ import {
 import CardBody from "components/Card/CardBody.js";
 import CardHeader from "components/Card/CardHeader.js";
 import HotelItem from "./HotelItem";
-import React from "react";
+import RevenueDialog from "../dialogs/RevenueDialog";
+import React, { useCallback, useState } from "react";
 
 const HotelTable = ({ title, captions, data }) => {
 	const textColor = useColorModeValue("gray.700", "white");
 
+	//? States
+	const [selectedItem, setSelectedItem] = useState(null);
+	const [revenueDialogVisible, setRevenueDialogVisible] = useState(false);
+	const [expenseDialogVisible, setExpenseDialogVisible] = useState(false);
+
+	//? Handles
+	const handleOpenDialog = useCallback((type, payload) => {
+		switch (type) {
+			case "RevenueDialog": {
+				setRevenueDialogVisible(true);
+				break;
+			}
+			case "ExpenseDialog": {
+				setExpenseDialogVisible(true);
+				break;
+			}
+			default:
+				break;
+		}
+	}, []);
+
 	return (
 		<>
+			{/* Dialogs */}
+			<RevenueDialog
+				visible={revenueDialogVisible}
+				setVisible={setRevenueDialogVisible}
+				item={selectedItem}
+			/>
+			{/* Table */}
 			<CardHeader p="6px 0px 22px 0px">
 				<Text fontSize="xl" color={textColor} fontWeight="bold">
 					{title}
@@ -49,6 +78,7 @@ const HotelTable = ({ title, captions, data }) => {
 									name={row.name}
 									logo={row.logo}
 									address={row.address}
+									onOpenDialog={handleOpenDialog}
 								/>
 							);
 						})}
