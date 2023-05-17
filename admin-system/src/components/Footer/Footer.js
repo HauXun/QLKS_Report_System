@@ -4,31 +4,31 @@ import { Flex, Link, List, ListItem, Text } from "@chakra-ui/react";
 import PropTypes from "prop-types";
 
 export default function Footer(props) {
-  // const linkTeal = useColorModeValue("teal.400", "red.200");=
-  return (
-    <Flex
-      flexDirection={{
-        base: "column",
-        xl: "row",
-      }}
-      alignItems={{
-        base: "center",
-        xl: "start",
-      }}
-      justifyContent="space-between"
-      px="30px"
-      pb="20px"
-    >
-      <Text
-        color="gray.400"
-        textAlign={{
-          base: "center",
-          xl: "start",
-        }}
-        mb={{ base: "20px", xl: "0px" }}
-      >
-        &copy; {1900 + new Date().getYear()},{" "}
-        <Text as="span">
+	// const linkTeal = useColorModeValue("teal.400", "red.200");=
+	return (
+		<Flex
+			flexDirection={{
+				base: "column",
+				xl: "row",
+			}}
+			alignItems={{
+				base: "center",
+				xl: "start",
+			}}
+			justifyContent="space-between"
+			px="30px"
+			pb="20px"
+		>
+			<Text
+				color="gray.400"
+				textAlign={{
+					base: "center",
+					xl: "start",
+				}}
+				mb={{ base: "20px", xl: "0px" }}
+			>
+				HỆ THỐNG BÁO CÁO THỐNG KÊ
+				{/* <Text as="span">
           {document.documentElement.dir === "rtl"
             ? " مصنوع من ❤️ بواسطة"
             : "Made with ❤️ by "}
@@ -54,9 +54,9 @@ export default function Footer(props) {
         </Link>
         {document.documentElement.dir === "rtl"
           ? "للحصول على ويب أفضل"
-          : " for a better web"}
-      </Text>
-      <List display="flex">
+          : " for a better web"} */}
+			</Text>
+			{/* <List display="flex">
         <ListItem
           me={{
             base: "20px",
@@ -102,7 +102,7 @@ export default function Footer(props) {
             {document.documentElement.dir === "rtl" ? "رخصة" : "License"}
           </Link>
         </ListItem>
-      </List>
-    </Flex>
-  );
+      </List> */}
+		</Flex>
+	);
 }
