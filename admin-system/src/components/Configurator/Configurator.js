@@ -74,7 +74,6 @@ export default function Configurator(props) {
 										w="50%"
 										p="8px 32px"
 										me="8px"
-										colorScheme="teal"
 										borderColor="teal.300"
 										color="teal.300"
 										variant="outline"
@@ -107,7 +106,6 @@ export default function Configurator(props) {
 									Cố định Navbar
 								</Text>
 								<Switch
-									colorScheme="teal"
 									isChecked={switched}
 									onChange={(event) => {
 										if (switched === true) {

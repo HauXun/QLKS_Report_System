@@ -9,7 +9,6 @@ import {
 	useColorModeValue,
 } from "@chakra-ui/react";
 // Custom components
-import Card from "components/Card/Card.js";
 import CardBody from "components/Card/CardBody.js";
 import CardHeader from "components/Card/CardHeader.js";
 import HotelItem from "./HotelItem";
@@ -19,7 +18,7 @@ const HotelTable = ({ title, captions, data }) => {
 	const textColor = useColorModeValue("gray.700", "white");
 
 	return (
-		<Card overflowX={{ sm: "scroll", xl: "hidden" }}>
+		<>
 			<CardHeader p="6px 0px 22px 0px">
 				<Text fontSize="xl" color={textColor} fontWeight="bold">
 					{title}
@@ -56,7 +55,7 @@ const HotelTable = ({ title, captions, data }) => {
 					</Tbody>
 				</Table>
 			</CardBody>
-		</Card>
+		</>
 	);
 };
 

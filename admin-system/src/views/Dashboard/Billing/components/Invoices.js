@@ -21,7 +21,6 @@ const Invoices = ({ title, data }) => {
             {title}
           </Text>
           <Button
-            colorScheme='teal'
             borderColor='teal.300'
             color='teal.300'
             variant='outline'

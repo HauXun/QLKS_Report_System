@@ -21,7 +21,6 @@ const ChartStatistics = ({ title, amount, icon, percentage }) => {
         {amount}
       </Text>
       <Progress
-        colorScheme='teal'
         borderRadius='12px'
         h='5px'
         value={percentage}
