@@ -12,8 +12,8 @@ using QLKS.Data.Contextp;
 namespace QLKS.Data.Migrations
 {
     [DbContext(typeof(ReportDbContext))]
-    [Migration("20230512090327_InitDb")]
-    partial class InitDb
+    [Migration("20230517100527_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -121,7 +121,7 @@ namespace QLKS.Data.Migrations
 
                     b.HasIndex("KhachSanId");
 
-                    b.ToTable("HddanhGia");
+                    b.ToTable("HdDanhGia");
                 });
 
             modelBuilder.Entity("QLKS.Core.Entities.HdKhachHang", b =>
@@ -151,7 +151,7 @@ namespace QLKS.Data.Migrations
 
                     b.HasIndex("KhachSanId");
 
-                    b.ToTable("HdkhachHang");
+                    b.ToTable("HdKhachHang");
                 });
 
             modelBuilder.Entity("QLKS.Core.Entities.HdNhanVien", b =>
@@ -184,7 +184,7 @@ namespace QLKS.Data.Migrations
 
                     b.HasIndex("KhachSanId");
 
-                    b.ToTable("HdnhanVien");
+                    b.ToTable("HdNhanVien");
                 });
 
             modelBuilder.Entity("QLKS.Core.Entities.HdPhong", b =>

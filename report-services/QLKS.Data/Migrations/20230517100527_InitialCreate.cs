@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace QLKS.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class InitDb : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -39,7 +39,7 @@ namespace QLKS.Data.Migrations
                     MucDich = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     MoTa = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     GhiChu = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ThoiGianTao = table.Column<DateTime>(type: "smalldatetime", nullable: false)
+                    ThoiGianTao = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -62,7 +62,7 @@ namespace QLKS.Data.Migrations
                     TenDoanhThu = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     TongDoanhThu = table.Column<float>(type: "real", nullable: false),
                     MoTa = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ThoiGianTao = table.Column<DateTime>(type: "smalldatetime", nullable: false)
+                    ThoiGianTao = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -76,7 +76,7 @@ namespace QLKS.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "HddanhGia",
+                name: "HdDanhGia",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -84,13 +84,13 @@ namespace QLKS.Data.Migrations
                     KhachSanId = table.Column<int>(type: "int", nullable: false),
                     ChatLuongDichVu = table.Column<byte>(type: "tinyint", nullable: false),
                     ChatLuongKhachSan = table.Column<byte>(type: "tinyint", nullable: false),
-                    ThoiGianTao = table.Column<DateTime>(type: "smalldatetime", nullable: false)
+                    ThoiGianTao = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_HddanhGia", x => x.Id);
+                    table.PrimaryKey("PK_HdDanhGia", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_HddanhGia_KhachSan_KhachSanId",
+                        name: "FK_HdDanhGia_KhachSan_KhachSanId",
                         column: x => x.KhachSanId,
                         principalTable: "KhachSan",
                         principalColumn: "Id",
@@ -98,7 +98,7 @@ namespace QLKS.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "HdkhachHang",
+                name: "HdKhachHang",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -107,13 +107,13 @@ namespace QLKS.Data.Migrations
                     TyLeKhachHangDi = table.Column<double>(type: "float", nullable: false),
                     TyLeKhachHangDen = table.Column<double>(type: "float", nullable: false),
                     TyLeHuyPhong = table.Column<double>(type: "float", nullable: false),
-                    ThoiGianTao = table.Column<DateTime>(type: "smalldatetime", nullable: false)
+                    ThoiGianTao = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_HdkhachHang", x => x.Id);
+                    table.PrimaryKey("PK_HdKhachHang", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_HdkhachHang_KhachSan_KhachSanId",
+                        name: "FK_HdKhachHang_KhachSan_KhachSanId",
                         column: x => x.KhachSanId,
                         principalTable: "KhachSan",
                         principalColumn: "Id",
@@ -121,7 +121,7 @@ namespace QLKS.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "HdnhanVien",
+                name: "HdNhanVien",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -131,13 +131,13 @@ namespace QLKS.Data.Migrations
                     SoNgayNghi = table.Column<int>(type: "int", nullable: false),
                     PhuCap = table.Column<float>(type: "real", nullable: false),
                     LuongThuong = table.Column<float>(type: "real", nullable: false),
-                    ThoiGianTao = table.Column<DateTime>(type: "smalldatetime", nullable: false)
+                    ThoiGianTao = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_HdnhanVien", x => x.Id);
+                    table.PrimaryKey("PK_HdNhanVien", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_HdnhanVien_KhachSan_KhachSanId",
+                        name: "FK_HdNhanVien_KhachSan_KhachSanId",
                         column: x => x.KhachSanId,
                         principalTable: "KhachSan",
                         principalColumn: "Id",
@@ -154,7 +154,7 @@ namespace QLKS.Data.Migrations
                     SoLuong = table.Column<int>(type: "int", nullable: false),
                     TyLeDatPhong = table.Column<double>(type: "float", nullable: false),
                     TyLePhongTrong = table.Column<double>(type: "float", nullable: false),
-                    ThoiGianTao = table.Column<DateTime>(type: "smalldatetime", nullable: false)
+                    ThoiGianTao = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -178,18 +178,18 @@ namespace QLKS.Data.Migrations
                 column: "KhachSanId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_HddanhGia_KhachSanId",
-                table: "HddanhGia",
+                name: "IX_HdDanhGia_KhachSanId",
+                table: "HdDanhGia",
                 column: "KhachSanId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_HdkhachHang_KhachSanId",
-                table: "HdkhachHang",
+                name: "IX_HdKhachHang_KhachSanId",
+                table: "HdKhachHang",
                 column: "KhachSanId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_HdnhanVien_KhachSanId",
-                table: "HdnhanVien",
+                name: "IX_HdNhanVien_KhachSanId",
+                table: "HdNhanVien",
                 column: "KhachSanId");
 
             migrationBuilder.CreateIndex(
@@ -208,13 +208,13 @@ namespace QLKS.Data.Migrations
                 name: "DoanhThu");
 
             migrationBuilder.DropTable(
-                name: "HddanhGia");
+                name: "HdDanhGia");
 
             migrationBuilder.DropTable(
-                name: "HdkhachHang");
+                name: "HdKhachHang");
 
             migrationBuilder.DropTable(
-                name: "HdnhanVien");
+                name: "HdNhanVien");
 
             migrationBuilder.DropTable(
                 name: "HdPhong");

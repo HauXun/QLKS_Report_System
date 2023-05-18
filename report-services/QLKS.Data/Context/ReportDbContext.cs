@@ -29,7 +29,7 @@ public class ReportDbContext : DbContext
     public virtual DbSet<KhachSan> KhachSan { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-      => optionsBuilder.UseSqlServer("Server=(local)\\SQLEXPRESS;Database=QLKS_Report_System;Trusted_Connection=True;TrustServerCertificate=True;");
+      => optionsBuilder.UseSqlServer("Server=LAPTOP-QG81K6JN;Database=QLKS_Report_System;Trusted_Connection=True;TrustServerCertificate=True;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
