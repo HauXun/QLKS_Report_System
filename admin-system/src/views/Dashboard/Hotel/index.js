@@ -12,9 +12,13 @@ import Card from "components/Card/Card.js";
 import HotelTable from "./components/HotelTable";
 import HotelIcon from "../../../assets/img/hotel.png";
 import { SearchIcon } from "@chakra-ui/icons";
+import useDebounce from "../../../hooks/useDebounce";
+import { Button } from "primereact/button";
 
 export default function HotelManager() {
 	const [searchValue, setSearchValue] = useState("");
+	const searchValueDebounce = useDebounce(searchValue, 800);
+	const [tableDataSave, setTableDataSave] = useState([]);
 	const [tableData, setTableData] = useState([]);
 
 	// Chakra Color Mode
@@ -28,74 +32,102 @@ export default function HotelManager() {
 			.then((res) => res.json())
 			.then((res) => {
 				if (res.isSuccess && res.result) {
-					setTableData(
-						res.result.map((hotel) => ({
-							...hotel,
-							logo: HotelIcon,
-							name: hotel.tenKhachSan,
-							address: hotel.diaChi,
-						}))
-					);
+					const data = res.result.map((hotel) => ({
+						...hotel,
+						logo: HotelIcon,
+						name: hotel.tenKhachSan,
+						address: hotel.diaChi,
+					}));
+					setTableData(data);
+					setTableDataSave(data);
 				}
 			});
-	}, [searchValue]);
+	}, []);
 
-	const handleSearch = () => {
-		console.log(searchValue);
-	};
+	useEffect(() => {
+		if (!searchValueDebounce) {
+			setTableData([...tableDataSave]);
+		} else {
+			const dataResult = tableDataSave.filter((i) =>
+				i.name.includes(searchValueDebounce)
+			);
+			setTableData(dataResult);
+		}
+	}, [searchValueDebounce]);
+
+	function resetTableData() {
+		setTableData(tableDataSave);
+		setSearchValue("");
+	}
 
 	return (
 		<Flex flexDirection="column" pt={{ base: "120px", md: "75px" }}>
 			<Card overflowX={{ sm: "scroll", xl: "hidden" }}>
-				<InputGroup
+				<div
 					style={{
-						marginBottom: "24px",
-					}}
-					cursor="pointer"
-					bg={inputBg}
-					borderRadius="15px"
-					me={{ sm: "auto", md: "20px" }}
-					_focus={{
-						borderColor: { mainTeal },
-					}}
-					_active={{
-						borderColor: { mainTeal },
+						display: "flex",
+						alignItems: "flex-start",
 					}}
 				>
-					<InputLeftElement
-						children={
-							<IconButton
-								bg="inherit"
-								borderRadius="inherit"
-								_hover="none"
-								_active={{
-									bg: "inherit",
-									transform: "none",
-									borderColor: "transparent",
-								}}
-								_focus={{
-									boxShadow: "none",
-								}}
-								icon={
-									<SearchIcon color={searchIcon} w="15px" h="15px" />
-								}
-								onClick={handleSearch}
-							></IconButton>
-						}
+					<InputGroup
+						style={{
+							marginBottom: "24px",
+							flex: "1",
+						}}
+						cursor="pointer"
+						bg={inputBg}
+						borderRadius="15px"
+						me={{ sm: "auto", md: "20px" }}
+						_focus={{
+							borderColor: { mainTeal },
+						}}
+						_active={{
+							borderColor: { mainTeal },
+						}}
+					>
+						<InputLeftElement
+							children={
+								<IconButton
+									bg="inherit"
+									borderRadius="inherit"
+									_hover="none"
+									_active={{
+										bg: "inherit",
+										transform: "none",
+										borderColor: "transparent",
+									}}
+									_focus={{
+										boxShadow: "none",
+									}}
+									icon={
+										<SearchIcon
+											color={searchIcon}
+											w="15px"
+											h="15px"
+										/>
+									}
+								></IconButton>
+							}
+						/>
+						<Input
+							py="11px"
+							color={mainText}
+							placeholder="Tìm kiếm khách sạn ..."
+							borderRadius="inherit"
+							value={searchValue}
+							onChange={(e) => setSearchValue(e.target.value.trim())}
+						/>
+					</InputGroup>
+					<Button
+						label="Tải lại danh sách"
+						onClick={resetTableData}
+						size="small"
 					/>
-					<Input
-						py="11px"
-						color={mainText}
-						placeholder="Tìm kiếm khách sạn ..."
-						borderRadius="inherit"
-						value={searchValue}
-						onChange={(e) => setSearchValue(e.target.value.trim())}
-					/>
-				</InputGroup>
+				</div>
 				<HotelTable
 					title={"Danh sách khách sạn"}
 					captions={["Khách sạn", ""]}
-					data={tableData}
+					data={tableData ?? []}
 				/>
 			</Card>
 		</Flex>

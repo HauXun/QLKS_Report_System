@@ -6,17 +6,17 @@ import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { Paginator } from "primereact/paginator";
 
-RevenueDialog.propTypes = {
+ExpenseDialog.propTypes = {
 	visible: PropTypes.bool.isRequired,
 	setVisible: PropTypes.func.isRequired,
 	item: PropTypes.object,
 };
 
-RevenueDialog.defaultProps = {
+ExpenseDialog.defaultProps = {
 	item: {},
 };
 
-function RevenueDialog({ visible, setVisible, item }) {
+function ExpenseDialog({ visible, setVisible, item }) {
 	//? States
 	const [tableData, setTableData] = useState([]);
 	const [selectedItem, setSelectedItem] = useState(null);
@@ -25,7 +25,7 @@ function RevenueDialog({ visible, setVisible, item }) {
 		if (item) {
 			(async () => {
 				const res = await fetch(
-					`${process.env.REACT_APP_API_URL}/doanhthu?KhachSanId=${item.id}`
+					`${process.env.REACT_APP_API_URL}/chiphi?KhachSanId=${item.id}`
 				);
 				const data = await res.json();
 				if (data.isSuccess && data.result) {
@@ -40,7 +40,7 @@ function RevenueDialog({ visible, setVisible, item }) {
 
 	return (
 		<Dialog
-			header="DANH SÁCH DOANH THU"
+			header="DANH SÁCH CHI PHÍ"
 			visible={visible}
 			style={{ width: "1000px" }}
 			onHide={() => setVisible(false)}
@@ -59,20 +59,47 @@ function RevenueDialog({ visible, setVisible, item }) {
 				emptyMessage="Không có kết quả"
 				tableStyle={{ minWidth: "max-content" }}
 			>
-				<Column field="tenDoanhThu" header="Tên doanh thu" frozen />
+				<Column field="tenChiPhi" header="Tên chi phí" frozen />
 				<Column
-					field="tongDoanhThu"
-					header="Tổng doanh thu"
+					field="tongChiPhi"
+					header="Tổng chi phí"
 					body={(row) =>
-						row.tongDoanhThu.toLocaleString("it-IT", {
+						row.tongChiPhi.toLocaleString("it-IT", {
 							style: "currency",
 							currency: "VND",
 						})
 					}
 				/>
 				<Column
-					field="moTa"
-					header="Mô tả"
+					field="chiPhiVao"
+					header="Chi phí vào"
+					body={(row) =>
+						row.chiPhiVao.toLocaleString("it-IT", {
+							style: "currency",
+							currency: "VND",
+						})
+					}
+				/>
+				<Column
+					field="chiPhiRa"
+					header="Chi phí ra"
+					body={(row) =>
+						row.chiPhiRa.toLocaleString("it-IT", {
+							style: "currency",
+							currency: "VND",
+						})
+					}
+				/>
+				<Column
+					field="mucDich"
+					header="Mục đích"
+					style={{
+						maxWidth: "420px",
+					}}
+				/>
+				<Column
+					field="ghiChu"
+					header="Ghi chú"
 					style={{
 						maxWidth: "420px",
 					}}
@@ -94,4 +121,4 @@ function RevenueDialog({ visible, setVisible, item }) {
 	);
 }
 
-export default RevenueDialog;
+export default ExpenseDialog;

@@ -23,12 +23,5 @@ var dashRoutes = [
 		layout: "/admin",
 		hideOnSidebar: true
 	},
-	{
-		path: "/signin",
-		name: "Đăng xuất",
-		icon: <RocketIcon color="inherit" />,
-		component: SignIn,
-		layout: "/auth",
-	},
 ];
 export default dashRoutes;

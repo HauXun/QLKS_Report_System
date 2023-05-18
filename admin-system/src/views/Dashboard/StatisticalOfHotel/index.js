@@ -4,7 +4,7 @@ import { Rating } from "primereact/rating";
 // Chakra imports
 import { Flex, SimpleGrid, useColorModeValue } from "@chakra-ui/react";
 import Card from "components/Card/Card.js";
-import { useParams } from "react-router-dom/cjs/react-router-dom.min";
+import { Link, useParams } from "react-router-dom/cjs/react-router-dom.min";
 import MiniStatistics from "./components/MiniStatistics";
 import {
 	CreditIcon,
@@ -15,6 +15,8 @@ import {
 import { Calendar } from "primereact/calendar";
 import { Button } from "primereact/button";
 import HotelIcon from "../../../assets/img/hotel.png";
+import RevenueDialog from "./dialogs/RevenueDialog/RevenueDialog";
+import ExpenseDialog from "./dialogs/ExpenseDialog/ExpenseDialog";
 
 const lineChartOptions = {
 	chart: {
@@ -101,6 +103,8 @@ export default function StatisticalOfHotel() {
 		fromDate: null,
 		toDate: null,
 	});
+	const [revenueDialogVisible, setRevenueDialogVisible] = useState(false);
+	const [expenseDialogVisible, setExpenseDialogVisible] = useState(false);
 
 	useEffect(() => {
 		Promise.all([getHotelInfo(), getRevenue(), getExpense()]).then(
@@ -126,6 +130,12 @@ export default function StatisticalOfHotel() {
 		);
 	}, []);
 
+	function handleOpenRevenueDialog() {
+		setRevenueDialogVisible(true);
+	}
+	function handleOpenExpenseDialog() {
+		setExpenseDialogVisible(true);
+	}
 	function getTotalRevenue() {
 		if (revenueData.data) {
 			return revenueData.data.reduce((a, b) => a + b, 0);
@@ -156,213 +166,290 @@ export default function StatisticalOfHotel() {
 	}
 
 	return (
-		<Flex flexDirection="column" pt={{ base: "120px", md: "75px" }}>
-			<Card>
-				<div
-					style={{
-						marginTop: "16px",
-						display: "flex",
-					}}
-				>
+		<>
+			<RevenueDialog
+				visible={revenueDialogVisible}
+				setVisible={setRevenueDialogVisible}
+				item={hotelInfo}
+			/>
+			<ExpenseDialog
+				visible={expenseDialogVisible}
+				setVisible={setExpenseDialogVisible}
+				item={hotelInfo}
+			/>
+			<Flex flexDirection="column" pt={{ base: "120px", md: "75px" }}>
+				<Card>
 					<div
 						style={{
-							width: "120px",
-							marginRight: "24px",
+							marginTop: "16px",
+							display: "flex",
 						}}
 					>
-						<img
+						<div
 							style={{
-								margin: "0 auto",
-							}}
-							src={HotelIcon}
-							alt="hotel"
-						/>
-					</div>
-					<div>
-						<h1
-							style={{
-								fontWeight: "bold",
-								marginBottom: "10px",
+								width: "120px",
+								marginRight: "24px",
 							}}
 						>
-							Thông tin khách sạn
-						</h1>
-						<h3
-							style={{
-								marginTop: "5px",
-							}}
-						>
-							Tên: {hotelInfo.tenKhachSan}
-						</h3>
-						<h6
-							style={{
-								marginTop: "5px",
-							}}
-						>
-							Địa chỉ: {hotelInfo.diaChi}
-						</h6>
-						<h6
-							style={{
-								marginTop: "5px",
-								display: "flex",
-								alignItems: "center",
-							}}
-						>
-							<span
+							<img
 								style={{
-									display: "inline-block",
-									minWidth: "172px",
+									margin: "0 auto",
+								}}
+								src={HotelIcon}
+								alt="hotel"
+							/>
+						</div>
+						<div>
+							<h1
+								style={{
+									fontWeight: "bold",
+									marginBottom: "10px",
 								}}
 							>
-								Chất lượng khách sạn:
-							</span>
-							<Rating value={5} readOnly cancel={false} />
-						</h6>
-						<h6
-							style={{
-								marginTop: "5px",
-								display: "flex",
-								alignItems: "center",
-							}}
-						>
-							<span
+								Thông tin khách sạn
+							</h1>
+							<h3
 								style={{
-									display: "inline-block",
-									minWidth: "172px",
+									marginTop: "5px",
 								}}
 							>
-								Chất lượng dịch vụ:
-							</span>
-							<Rating value={4} readOnly cancel={false} />
-						</h6>
+								Tên: {hotelInfo.tenKhachSan}
+							</h3>
+							<h6
+								style={{
+									marginTop: "5px",
+								}}
+							>
+								Địa chỉ: {hotelInfo.diaChi}
+							</h6>
+							<h6
+								style={{
+									marginTop: "5px",
+									display: "flex",
+									alignItems: "center",
+								}}
+							>
+								<span
+									style={{
+										display: "inline-block",
+										minWidth: "172px",
+									}}
+								>
+									Chất lượng khách sạn:
+								</span>
+								<Rating value={5} readOnly cancel={false} />
+							</h6>
+							<h6
+								style={{
+									marginTop: "5px",
+									display: "flex",
+									alignItems: "center",
+								}}
+							>
+								<span
+									style={{
+										display: "inline-block",
+										minWidth: "172px",
+									}}
+								>
+									Chất lượng dịch vụ:
+								</span>
+								<Rating value={4} readOnly cancel={false} />
+							</h6>
+						</div>
 					</div>
-				</div>
-			</Card>
+				</Card>
 
-			<SimpleGrid
-				columns={{ sm: 1, md: 2, xl: 2 }}
-				spacing="16px"
-				style={{
-					marginTop: "16px",
-				}}
-			>
-				<MiniStatistics
-					title={"Tổng doanh thu"}
-					amount={getTotalRevenue().toLocaleString("it-IT", {
-						style: "currency",
-						currency: "VND",
-					})}
-					percentage={10}
-					icon={<WalletIcon h={"24px"} w={"24px"} color={iconBoxInside} />}
-				/>
-				<MiniStatistics
-					title={"Tổng chi phí"}
-					amount={getTotalExpense().toLocaleString("it-IT", {
-						style: "currency",
-						currency: "VND",
-					})}
-					percentage={-5}
-					icon={<CreditIcon h={"24px"} w={"24px"} color={iconBoxInside} />}
-				/>
-			</SimpleGrid>
-			<SimpleGrid
-				columns={{ sm: 1, md: 3, xl: 3 }}
-				spacing="16px"
-				style={{
-					marginTop: "16px",
-				}}
-			>
-				<MiniStatistics
-					title={"Tổng nhân viên"}
-					amount={120}
-					percentage={3}
-					icon={<PersonIcon h={"24px"} w={"24px"} color={iconBoxInside} />}
-				/>
-				<MiniStatistics
-					title={"Tổng khách hàng"}
-					amount={3600}
-					percentage={14}
-					icon={<PersonIcon h={"24px"} w={"24px"} color={iconBoxInside} />}
-				/>
-				<MiniStatistics
-					title={"Tổng phòng"}
-					amount={68}
-					percentage={2}
-					icon={
-						<DocumentIcon h={"24px"} w={"24px"} color={iconBoxInside} />
-					}
-				/>
-			</SimpleGrid>
-
-			<Card
-				overflowX={{ sm: "scroll", xl: "hidden" }}
-				style={{
-					marginTop: "16px",
-				}}
-			>
-				<div>
-					<h4>Chọn mốc thời gian thống kê</h4>
-					<SimpleGrid
-						columns={{ sm: 1, md: 2, xl: 2 }}
-						spacing="16px"
-						style={{
-							marginTop: "16px",
-						}}
-					>
-						<Calendar
-							value={dateFilter.fromDate}
-							onChange={(e) =>
-								setDateFilter((prevState) => ({
-									...prevState,
-									fromDate: e.value,
-								}))
-							}
-							showIcon
-							size
-						/>
-						<Calendar
-							value={dateFilter.toDate}
-							onChange={(e) =>
-								setDateFilter((prevState) => ({
-									...prevState,
-									toDate: e.value,
-								}))
-							}
-							showIcon
-						/>
-					</SimpleGrid>
-					<Button
-						style={{
-							marginTop: "16px",
-						}}
-						label="Lọc dữ liệu"
-						size="small"
-					/>
-				</div>
-				<div
-					style={{
-						marginTop: "32px",
-					}}
-				>
-					<h4>Biểu đồ doanh thu và chi phí</h4>
-					<ReactApexChart
-						options={lineChartOptions}
-						series={[revenueData, expenseData]}
-						type="area"
-						width="100%"
-						height="100%"
-					/>
-				</div>
-				<Button
+				<SimpleGrid
+					columns={{ sm: 1, md: 2, xl: 2 }}
+					spacing="16px"
 					style={{
 						marginTop: "16px",
-						width: "max-content",
 					}}
-					label="Xem danh sách doanh thu"
-					size="small"
-					outlined
-				/>
-			</Card>
-		</Flex>
+				>
+					<MiniStatistics
+						title={"Tổng doanh thu"}
+						amount={getTotalRevenue().toLocaleString("it-IT", {
+							style: "currency",
+							currency: "VND",
+						})}
+						percentage={10}
+						icon={
+							<WalletIcon h={"24px"} w={"24px"} color={iconBoxInside} />
+						}
+					/>
+					<MiniStatistics
+						title={"Tổng chi phí"}
+						amount={getTotalExpense().toLocaleString("it-IT", {
+							style: "currency",
+							currency: "VND",
+						})}
+						percentage={-5}
+						icon={
+							<CreditIcon h={"24px"} w={"24px"} color={iconBoxInside} />
+						}
+					/>
+				</SimpleGrid>
+				<SimpleGrid
+					columns={{ sm: 1, md: 3, xl: 3 }}
+					spacing="16px"
+					style={{
+						marginTop: "16px",
+					}}
+				>
+					<MiniStatistics
+						title={"Số lượng nhân viên"}
+						amount={120}
+						percentage={3}
+						icon={
+							<PersonIcon h={"24px"} w={"24px"} color={iconBoxInside} />
+						}
+					/>
+					<MiniStatistics
+						title={"Số lượng khách hàng"}
+						amount={3600}
+						percentage={14}
+						icon={
+							<PersonIcon h={"24px"} w={"24px"} color={iconBoxInside} />
+						}
+					/>
+					<MiniStatistics
+						title={"Số lượng phòng"}
+						amount={68}
+						percentage={2}
+						icon={
+							<DocumentIcon
+								h={"24px"}
+								w={"24px"}
+								color={iconBoxInside}
+							/>
+						}
+					/>
+				</SimpleGrid>
+
+				<Card
+					overflowX={{ sm: "scroll", xl: "hidden" }}
+					style={{
+						marginTop: "16px",
+					}}
+				>
+					<div>
+						<h4>Chọn mốc thời gian thống kê</h4>
+						<SimpleGrid
+							columns={{ sm: 1, md: 2, xl: 2 }}
+							spacing="16px"
+							style={{
+								marginTop: "16px",
+							}}
+						>
+							<Calendar
+								value={dateFilter.fromDate}
+								onChange={(e) =>
+									setDateFilter((prevState) => ({
+										...prevState,
+										fromDate: e.value,
+									}))
+								}
+								showIcon
+								size
+							/>
+							<Calendar
+								value={dateFilter.toDate}
+								onChange={(e) =>
+									setDateFilter((prevState) => ({
+										...prevState,
+										toDate: e.value,
+									}))
+								}
+								showIcon
+							/>
+						</SimpleGrid>
+						<Button
+							style={{
+								marginTop: "16px",
+							}}
+							label="Lọc dữ liệu"
+							size="small"
+						/>
+					</div>
+					<div
+						style={{
+							marginTop: "32px",
+						}}
+					>
+						<h4>Biểu đồ doanh thu và chi phí</h4>
+						<ReactApexChart
+							options={lineChartOptions}
+							series={[revenueData, expenseData]}
+							type="area"
+							width="100%"
+							height="500px"
+						/>
+					</div>
+					<div
+						style={{
+							display: "flex",
+							justifyContent: "space-between",
+							marginTop: "16px",
+						}}
+					>
+						<div
+							style={{
+								display: "flex",
+								marginTop: "16px",
+							}}
+						>
+							<Button
+								style={{
+									width: "max-content",
+								}}
+								label="Xem danh sách doanh thu"
+								size="small"
+								outlined
+								onClick={handleOpenRevenueDialog}
+							/>
+							<Button
+								style={{
+									marginLeft: "10px",
+									width: "max-content",
+								}}
+								label="Xem danh sách chi phí"
+								size="small"
+								outlined
+								onClick={handleOpenExpenseDialog}
+							/>
+						</div>
+						<div
+							severity="success"
+							style={{
+								display: "flex",
+								marginTop: "16px",
+							}}
+						>
+							<Button
+								style={{
+									width: "max-content",
+								}}
+								label="Xuất thông tin"
+								size="small"
+								outlined
+							/>
+							<Link to="/admin/dashboard">
+								<Button
+									severity="danger"
+									style={{
+										marginLeft: "10px",
+										width: "max-content",
+									}}
+									label="Thoát"
+									size="small"
+									outlined
+								/>
+							</Link>
+						</div>
+					</div>
+				</Card>
+			</Flex>
+		</>
 	);
 }
