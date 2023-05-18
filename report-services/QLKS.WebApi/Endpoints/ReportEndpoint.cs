@@ -46,12 +46,13 @@ public class ReportEndpoint : ICarterModule
             return Results.Ok(ApiResponse.Fail(HttpStatusCode.NotFound, $"Không tìm thấy khách sạn nào!"));
         }
 
+        IList<HdDanhGia> result = null;
+
         if (model.Date == null && model.FromDate == null && model.ToDate == null)
         {
-            return Results.Ok(ApiResponse.Fail(HttpStatusCode.BadRequest, $"Thông tin không hợp lệ!"));
+            result = await reportRepository.GetHDDanhGiaAsync(model.KhachSanId.Value);
         }
 
-        IList<HdDanhGia> result = null;
         if (model.Date != null)
         {
             result = await reportRepository.GetHDDanhGiaAsync(model.KhachSanId.Value, model.Date.Value);
@@ -83,12 +84,13 @@ public class ReportEndpoint : ICarterModule
             return Results.Ok(ApiResponse.Fail(HttpStatusCode.NotFound, $"Không tìm thấy khách sạn nào!"));
         }
 
+        IList<HdKhachHang> result = null;
+
         if (model.Date == null && model.FromDate == null && model.ToDate == null)
         {
-            return Results.Ok(ApiResponse.Fail(HttpStatusCode.BadRequest, $"Thông tin không hợp lệ!"));
+            result = await reportRepository.GetHDKhachHangAsync(model.KhachSanId.Value);
         }
-
-        IList<HdKhachHang> result = null;
+        
         if (model.Date != null)
         {
             result = await reportRepository.GetHDKhachHangAsync(model.KhachSanId.Value, model.Date.Value);
@@ -119,12 +121,13 @@ public class ReportEndpoint : ICarterModule
             return Results.Ok(ApiResponse.Fail(HttpStatusCode.NotFound, $"Không tìm thấy khách sạn nào!"));
         }
 
+        IList<HdNhanVien> result = null;
+
         if (model.Date == null && model.FromDate == null && model.ToDate == null)
         {
-            return Results.Ok(ApiResponse.Fail(HttpStatusCode.BadRequest, $"Thông tin không hợp lệ!"));
+            result = await reportRepository.GetHDNhanVienAsync(model.KhachSanId.Value);
         }
 
-        IList<HdNhanVien> result = null;
         if (model.Date != null)
         {
             result = await reportRepository.GetHDNhanVienAsync(model.KhachSanId.Value, model.Date.Value);
@@ -155,12 +158,13 @@ public class ReportEndpoint : ICarterModule
             return Results.Ok(ApiResponse.Fail(HttpStatusCode.NotFound, $"Không tìm thấy khách sạn nào!"));
         }
 
+        IList<HdPhong> result = null;
+
         if (model.Date == null && model.FromDate == null && model.ToDate == null)
         {
-            return Results.Ok(ApiResponse.Fail(HttpStatusCode.BadRequest, $"Thông tin không hợp lệ!"));
+            result = await reportRepository.GetHDPhongAsync(model.KhachSanId.Value);
         }
 
-        IList<HdPhong> result = null;
         if (model.Date != null)
         {
             result = await reportRepository.GetHDPhongAsync(model.KhachSanId.Value, model.Date.Value);
@@ -191,12 +195,13 @@ public class ReportEndpoint : ICarterModule
             return Results.Ok(ApiResponse.Fail(HttpStatusCode.NotFound, $"Không tìm thấy khách sạn nào!"));
         }
 
+        IList<ChiPhi> result = null;
+
         if (model.Date == null && model.FromDate == null && model.ToDate == null)
         {
-            return Results.Ok(ApiResponse.Fail(HttpStatusCode.BadRequest, $"Thông tin không hợp lệ!"));
+            result = await reportRepository.GetChiPhiAsync(model.KhachSanId.Value);
         }
 
-        IList<ChiPhi> result = null;
         if (model.Date != null)
         {
             result = await reportRepository.GetChiPhiAsync(model.KhachSanId.Value, model.Date.Value);
@@ -227,12 +232,13 @@ public class ReportEndpoint : ICarterModule
             return Results.Ok(ApiResponse.Fail(HttpStatusCode.NotFound, $"Không tìm thấy khách sạn nào!"));
         }
 
+        IList<DoanhThu> result = null;
+        
         if (model.Date == null && model.FromDate == null && model.ToDate == null)
         {
-            return Results.Ok(ApiResponse.Fail(HttpStatusCode.BadRequest, $"Thông tin không hợp lệ!"));
+            result = await reportRepository.GetDoanhThuAsync(model.KhachSanId.Value);
         }
 
-        IList<DoanhThu> result = null;
         if (model.Date != null)
         {
             result = await reportRepository.GetDoanhThuAsync(model.KhachSanId.Value, model.Date.Value);

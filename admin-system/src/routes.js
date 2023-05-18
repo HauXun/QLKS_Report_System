@@ -1,5 +1,6 @@
 // import
 import Hotel from "views/Dashboard/Hotel";
+import StatisticalOfHotel from "views/Dashboard/StatisticalOfHotel";
 import SignIn from "views/Auth/SignIn.js";
 
 import {
@@ -14,6 +15,13 @@ var dashRoutes = [
 		icon: <HomeIcon color="inherit" />,
 		component: Hotel,
 		layout: "/admin",
+	},
+	{
+		path: "/statistical-of-hotel/:id",
+		name: "Thống kê của khách sạn",
+		component: StatisticalOfHotel,
+		layout: "/admin",
+		hideOnSidebar: true
 	},
 	{
 		path: "/signin",

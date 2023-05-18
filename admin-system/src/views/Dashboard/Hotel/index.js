@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 // Chakra imports
 import {
 	Flex,
@@ -13,47 +13,32 @@ import HotelTable from "./components/HotelTable";
 import HotelIcon from "../../../assets/img/hotel.png";
 import { SearchIcon } from "@chakra-ui/icons";
 
-const tablesTableData = [
-	{
-		logo: HotelIcon,
-		name: "Esthera Jackson",
-		address: "alexa@simmmple.com",
-	},
-	{
-		logo: HotelIcon,
-		name: "Alexa Liras",
-		address: "laurent@simmmple.com",
-	},
-	{
-		logo: HotelIcon,
-		name: "Laurent Michael",
-		address: "laurent@simmmple.com",
-	},
-	{
-		logo: HotelIcon,
-		name: "Freduardo Hill",
-		address: "freduardo@simmmple.com",
-	},
-	{
-		logo: HotelIcon,
-		name: "Daniel Thomas",
-		address: "daniel@simmmple.com",
-	},
-	{
-		logo: HotelIcon,
-		name: "Mark Wilson",
-		address: "mark@simmmple.com",
-	},
-];
-
 export default function HotelManager() {
 	const [searchValue, setSearchValue] = useState("");
+	const [tableData, setTableData] = useState([]);
 
 	// Chakra Color Mode
 	let mainTeal = useColorModeValue("teal.300", "teal.300");
 	let inputBg = useColorModeValue("white", "gray.800");
 	let mainText = useColorModeValue("gray.700", "gray.200");
 	let searchIcon = useColorModeValue("gray.700", "gray.200");
+
+	useEffect(() => {
+		fetch(`${process.env.REACT_APP_API_URL}/khachsan`)
+			.then((res) => res.json())
+			.then((res) => {
+				if (res.isSuccess && res.result) {
+					setTableData(
+						res.result.map((hotel) => ({
+							...hotel,
+							logo: HotelIcon,
+							name: hotel.tenKhachSan,
+							address: hotel.diaChi,
+						}))
+					);
+				}
+			});
+	}, [searchValue]);
 
 	const handleSearch = () => {
 		console.log(searchValue);
@@ -110,7 +95,7 @@ export default function HotelManager() {
 				<HotelTable
 					title={"Danh sách khách sạn"}
 					captions={["Khách sạn", ""]}
-					data={tablesTableData}
+					data={tableData}
 				/>
 			</Card>
 		</Flex>

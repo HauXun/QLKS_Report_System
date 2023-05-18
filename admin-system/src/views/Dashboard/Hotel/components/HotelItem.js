@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import {
 	Avatar,
 	Flex,
@@ -6,66 +7,12 @@ import {
 	Tr,
 	useColorModeValue,
 } from "@chakra-ui/react";
-import { SplitButton } from "primereact/splitbutton";
+import { Button } from "primereact/button";
 
 import React from "react";
-import PropTypes from "prop-types";
 
-HotelItem.propTypes = {
-	onOpenDialog: PropTypes.func,
-};
-
-HotelItem.defaultProps = {
-	onOpenDialog: () => {},
-};
-
-function HotelItem({ logo, name, address, onOpenDialog }) {
+function HotelItem({ id, logo, name, address }) {
 	const textColor = useColorModeValue("gray.700", "white");
-
-	const actions = [
-		{
-			label: "Doanh thu",
-			icon: "pi pi-cart-plus",
-			command: () => {
-				onOpenDialog("RevenueDialog");
-			},
-		},
-		{
-			label: "Chi phí",
-			icon: "pi pi-calculator",
-			command: () => {
-				onOpenDialog("RevenueDialog");
-			},
-		},
-		{
-			label: "Đánh giá",
-			icon: "pi pi-star",
-			command: () => {
-				onOpenDialog("RevenueDialog");
-			},
-		},
-		{
-			label: "Khách hàng",
-			icon: "pi pi-user",
-			command: () => {
-				onOpenDialog("RevenueDialog");
-			},
-		},
-		{
-			label: "Nhân viên",
-			icon: "pi pi-users",
-			command: () => {
-				onOpenDialog("RevenueDialog");
-			},
-		},
-		{
-			label: "Phòng",
-			icon: "pi pi-stop",
-			command: () => {
-				onOpenDialog("RevenueDialog");
-			},
-		},
-	];
 
 	return (
 		<Tr>
@@ -88,13 +35,13 @@ function HotelItem({ logo, name, address, onOpenDialog }) {
 				</Flex>
 			</Td>
 			<Td>
-				<SplitButton
-					label="Tùy chọn"
-					icon="pi pi-plus"
-					model={actions}
-					outlined
-					size="small"
-				/>
+				<Link to={`/admin/statistical-of-hotel/${id}`}>
+					<Button
+						label="Xem thống kê"
+						outlined
+						size="small"
+					/>
+				</Link>
 			</Td>
 		</Tr>
 	);
