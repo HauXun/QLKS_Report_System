@@ -107,7 +107,7 @@ function ExpenseDialog({ visible, setVisible, item }) {
 				<Column
 					field="thoiGianTao"
 					header="Thời gian tạo"
-					body={(row) => Date(row.thoiGianTao)}
+					body={(row) => new Date(row.thoiGianTao).toDateString()}
 				/>
 			</DataTable>
 			<Paginator

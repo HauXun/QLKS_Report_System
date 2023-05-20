@@ -41,6 +41,9 @@ export default function HotelManager() {
 					setTableData(data);
 					setTableDataSave(data);
 				}
+			})
+			.catch((err) => {
+				console.error(err);
 			});
 	}, []);
 
@@ -112,7 +115,7 @@ export default function HotelManager() {
 						<Input
 							py="11px"
 							color={mainText}
-							placeholder="Tìm kiếm khách sạn ..."
+							placeholder="Nhập tên khách sạn cần tìm ..."
 							borderRadius="inherit"
 							value={searchValue}
 							onChange={(e) => setSearchValue(e.target.value.trim())}

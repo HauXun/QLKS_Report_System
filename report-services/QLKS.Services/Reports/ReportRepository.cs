@@ -42,6 +42,7 @@ public class ReportRepository : IReportRepository
         return await _dbContext.ChiPhi.Include(c => c.KhachSan)
                                       .AsNoTracking()
                                       .AsSplitQuery()
+                                      .OrderBy(x => x.ThoiGianTao)
                                       .Where(c => c.KhachSanId == ksId)
                                       .ToListAsync(cancellationToken);
     }
@@ -51,6 +52,7 @@ public class ReportRepository : IReportRepository
         return await _dbContext.ChiPhi.Include(c => c.KhachSan)
                                       .AsNoTracking()
                                       .AsSplitQuery()
+                                      .OrderBy(x => x.ThoiGianTao)
                                       .Where(c => c.KhachSanId == ksId && c.ThoiGianTao.Date.Equals(date))
                                       .ToListAsync(cancellationToken);
     }
@@ -60,6 +62,7 @@ public class ReportRepository : IReportRepository
         return await _dbContext.ChiPhi.Include(c => c.KhachSan)
                                       .AsNoTracking()
                                       .AsSplitQuery()
+                                      .OrderBy(x => x.ThoiGianTao)
                                       .Where(c => c.KhachSanId == ksId && c.ThoiGianTao.Date > fromDate && c.ThoiGianTao.Date < toDate)
                                       .ToListAsync(cancellationToken);
     }
@@ -69,6 +72,7 @@ public class ReportRepository : IReportRepository
         return await _dbContext.DoanhThu.Include(c => c.KhachSan)
                                         .AsNoTracking()
                                         .AsSplitQuery()
+                                        .OrderBy(x => x.ThoiGianTao)
                                         .Where(c => c.KhachSanId == ksId)
                                         .ToListAsync(cancellationToken);
     }
@@ -78,6 +82,7 @@ public class ReportRepository : IReportRepository
         return await _dbContext.DoanhThu.Include(c => c.KhachSan)
                                         .AsNoTracking()
                                         .AsSplitQuery()
+                                        .OrderBy(x => x.ThoiGianTao)
                                         .Where(c => c.KhachSanId == ksId && c.ThoiGianTao.Date.Equals(date))
                                         .ToListAsync(cancellationToken);
     }
@@ -87,6 +92,7 @@ public class ReportRepository : IReportRepository
         return await _dbContext.DoanhThu.Include(c => c.KhachSan)
                                         .AsNoTracking()
                                         .AsSplitQuery()
+                                        .OrderBy(x => x.ThoiGianTao)
                                         .Where(c => c.KhachSanId == ksId && c.ThoiGianTao.Date > fromDate && c.ThoiGianTao.Date < toDate)
                                         .ToListAsync(cancellationToken);
     }
@@ -96,6 +102,7 @@ public class ReportRepository : IReportRepository
         return await _dbContext.HdDanhGia.Include(c => c.KhachSan)
                                          .AsNoTracking()
                                          .AsSplitQuery()
+                                         .OrderBy(x => x.ThoiGianTao)
                                          .Where(c => c.KhachSanId == ksId)
                                          .ToListAsync(cancellationToken);
     }
@@ -105,6 +112,7 @@ public class ReportRepository : IReportRepository
         return await _dbContext.HdDanhGia.Include(c => c.KhachSan)
                                          .AsNoTracking()
                                          .AsSplitQuery()
+                                         .OrderBy(x => x.ThoiGianTao)
                                          .Where(c => c.KhachSanId == ksId && c.ThoiGianTao.Date.Equals(date))
                                          .ToListAsync(cancellationToken);
     }
@@ -114,6 +122,7 @@ public class ReportRepository : IReportRepository
         return await _dbContext.HdDanhGia.Include(c => c.KhachSan)
                                          .AsNoTracking()
                                          .AsSplitQuery()
+                                         .OrderBy(x => x.ThoiGianTao)
                                          .Where(c => c.KhachSanId == ksId && c.ThoiGianTao.Date > fromDate && c.ThoiGianTao.Date < toDate)
                                          .ToListAsync(cancellationToken);
     }
@@ -123,6 +132,7 @@ public class ReportRepository : IReportRepository
         return await _dbContext.HdKhachHang.Include(c => c.KhachSan)
                                            .AsNoTracking()
                                            .AsSplitQuery()
+                                           .OrderBy(x => x.ThoiGianTao)
                                            .Where(c => c.KhachSanId == ksId)
                                            .ToListAsync(cancellationToken);
     }
@@ -132,6 +142,7 @@ public class ReportRepository : IReportRepository
         return await _dbContext.HdKhachHang.Include(c => c.KhachSan)
                                            .AsNoTracking()
                                            .AsSplitQuery()
+                                           .OrderBy(x => x.ThoiGianTao)
                                            .Where(c => c.KhachSanId == ksId && c.ThoiGianTao.Date.Equals(date))
                                            .ToListAsync(cancellationToken);
     }
@@ -141,6 +152,7 @@ public class ReportRepository : IReportRepository
         return await _dbContext.HdKhachHang.Include(c => c.KhachSan)
                                            .AsNoTracking()
                                            .AsSplitQuery()
+                                           .OrderBy(x => x.ThoiGianTao)
                                            .Where(c => c.KhachSanId == ksId && c.ThoiGianTao.Date > fromDate && c.ThoiGianTao.Date < toDate)
                                            .ToListAsync(cancellationToken);
     }
@@ -150,6 +162,7 @@ public class ReportRepository : IReportRepository
         return await _dbContext.HdNhanVien.Include(c => c.KhachSan)
                                           .AsNoTracking()
                                           .AsSplitQuery()
+                                          .OrderBy(x => x.ThoiGianTao)
                                           .Where(c => c.KhachSanId == ksId)
                                           .ToListAsync(cancellationToken);
     }
@@ -159,6 +172,7 @@ public class ReportRepository : IReportRepository
         return await _dbContext.HdNhanVien.Include(c => c.KhachSan)
                                           .AsNoTracking()
                                           .AsSplitQuery()
+                                          .OrderBy(x => x.ThoiGianTao)
                                           .Where(c => c.KhachSanId == ksId && c.ThoiGianTao.Date.Equals(date))
                                           .ToListAsync(cancellationToken);
     }
@@ -168,6 +182,7 @@ public class ReportRepository : IReportRepository
         return await _dbContext.HdNhanVien.Include(c => c.KhachSan)
                                           .AsNoTracking()
                                           .AsSplitQuery()
+                                          .OrderBy(x => x.ThoiGianTao)
                                           .Where(c => c.KhachSanId == ksId && c.ThoiGianTao.Date > fromDate && c.ThoiGianTao.Date < toDate)
                                           .ToListAsync(cancellationToken);
     }
@@ -177,6 +192,7 @@ public class ReportRepository : IReportRepository
         return await _dbContext.HdPhong.Include(c => c.KhachSan)
                                        .AsNoTracking()
                                        .AsSplitQuery()
+                                       .OrderBy(x => x.ThoiGianTao)
                                        .Where(c => c.KhachSanId == ksId)
                                        .ToListAsync(cancellationToken);
     }
@@ -186,6 +202,7 @@ public class ReportRepository : IReportRepository
         return await _dbContext.HdPhong.Include(c => c.KhachSan)
                                        .AsNoTracking()
                                        .AsSplitQuery()
+                                       .OrderBy(x => x.ThoiGianTao)
                                        .Where(c => c.KhachSanId == ksId && c.ThoiGianTao.Date.Equals(date))
                                        .ToListAsync(cancellationToken);
     }
@@ -195,6 +212,7 @@ public class ReportRepository : IReportRepository
         return await _dbContext.HdPhong.Include(c => c.KhachSan)
                                        .AsNoTracking()
                                        .AsSplitQuery()
+                                       .OrderBy(x => x.ThoiGianTao)
                                        .Where(c => c.KhachSanId == ksId && c.ThoiGianTao.Date > fromDate && c.ThoiGianTao.Date < toDate)
                                        .ToListAsync(cancellationToken);
     }

@@ -1,4 +1,5 @@
 ﻿using Bogus;
+using Microsoft.EntityFrameworkCore;
 using QLKS.Core.Entities;
 using QLKS.Data.Contextp;
 
@@ -26,7 +27,7 @@ namespace QLKS.Data.Seeders
         {
             var ks = _dbContext.KhachSan.Any() ? _dbContext.KhachSan.ToList() : await AddKs();
             var doanhthu = _dbContext.DoanhThu.Any() ? _dbContext.DoanhThu.ToList() : await AddDoanhThu(ks);
-            var chiphi = _dbContext.ChiPhi.Any() ? _dbContext.ChiPhi.ToList() : await AddChiPhi(ks);
+            var chiphi = _dbContext.ChiPhi.Any() ? _dbContext.ChiPhi.ToList() : await AddChiPhi(ks, doanhthu);
             var hdKhachHang = _dbContext.HdKhachHang.Any() ? _dbContext.HdKhachHang.ToList() : await AddHdKhachHang(ks);
             var hdNhanVien = _dbContext.HdNhanVien.Any() ? _dbContext.HdNhanVien.ToList() : await AddHdNhanVien(ks);
             var hdPhong = _dbContext.HdPhong.Any() ? _dbContext.HdPhong.ToList() : await AddHdPhong(ks);
@@ -39,7 +40,7 @@ namespace QLKS.Data.Seeders
             fakeKs.RuleFor(u => u.ChatLuongKhachSan, f => f.Random.Byte(1, 10));
             fakeKs.RuleFor(u => u.ChatLuongDichVu, f => f.Random.Byte(1, 10));
             fakeKs.RuleFor(u => u.KhachSan, f => f.PickRandom(ks));
-            fakeKs.RuleFor(u => u.ThoiGianTao, f => f.Date.Between(new DateTime(2023, 1, 10), new DateTime(2023, 6, 30)));
+            fakeKs.RuleFor(u => u.ThoiGianTao, f => f.Date.Between(new DateTime(2018, 1, 1), new DateTime(2023, 12, 30)));
 
             var hdDanhGia = fakeKs.Generate(500);
 
@@ -56,7 +57,7 @@ namespace QLKS.Data.Seeders
             fakeKs.RuleFor(u => u.TyLeDatPhong, f => f.Random.Int(1, 10));
             fakeKs.RuleFor(u => u.TyLePhongTrong, f => f.Random.Int(1, 10));
             fakeKs.RuleFor(u => u.KhachSan, f => f.PickRandom(ks));
-            fakeKs.RuleFor(u => u.ThoiGianTao, f => f.Date.Between(new DateTime(2023, 1, 10), new DateTime(2023, 6, 30)));
+            fakeKs.RuleFor(u => u.ThoiGianTao, f => f.Date.Between(new DateTime(2018, 1, 1), new DateTime(2023, 12, 30)));
 
             var hdPhong = fakeKs.Generate(500);
 
@@ -74,7 +75,7 @@ namespace QLKS.Data.Seeders
             fakeKs.RuleFor(u => u.PhuCap, f => f.Random.Int(250000, 550000));
             fakeKs.RuleFor(u => u.LuongThuong, f => f.Random.Int(2500000, 5500000));
             fakeKs.RuleFor(u => u.KhachSan, f => f.PickRandom(ks));
-            fakeKs.RuleFor(u => u.ThoiGianTao, f => f.Date.Between(new DateTime(2023, 1, 10), new DateTime(2023, 6, 30)));
+            fakeKs.RuleFor(u => u.ThoiGianTao, f => f.Date.Between(new DateTime(2018, 1, 1), new DateTime(2023, 12, 30)));
 
             var hdNhanVien = fakeKs.Generate(500);
 
@@ -91,7 +92,7 @@ namespace QLKS.Data.Seeders
             fakeKs.RuleFor(u => u.TyLeKhachHangDi, f => f.Random.Int(1, 100));
             fakeKs.RuleFor(u => u.TyLeHuyPhong, f => f.Random.Int(1, 100));
             fakeKs.RuleFor(u => u.KhachSan, f => f.PickRandom(ks));
-            fakeKs.RuleFor(u => u.ThoiGianTao, f => f.Date.Between(new DateTime(2023, 1, 10), new DateTime(2023, 6, 30)));
+            fakeKs.RuleFor(u => u.ThoiGianTao, f => f.Date.Between(new DateTime(2018, 1, 1), new DateTime(2023, 12, 30)));
 
             var hdKhachHang = fakeKs.Generate(500);
 
@@ -101,16 +102,13 @@ namespace QLKS.Data.Seeders
             return hdKhachHang;
         }
 
-        private async Task<List<ChiPhi>> AddChiPhi(List<KhachSan> ks)
+        private async Task<List<ChiPhi>> AddChiPhi(List<KhachSan> ks, List<DoanhThu> dt)
         {
             var fakeKs = new Faker<ChiPhi>("vi");
             fakeKs.RuleFor(u => u.TenChiPhi, f => f.Name.FullName());
-            fakeKs.RuleFor(u => u.KhachSan, f => f.PickRandom(ks));
             fakeKs.RuleFor(u => u.MucDich, f => f.Lorem.Paragraph());
             fakeKs.RuleFor(u => u.MoTa, f => f.Lorem.Paragraphs(3));
             fakeKs.RuleFor(u => u.GhiChu, f => f.Lorem.Paragraphs(3));
-            fakeKs.RuleFor(u => u.KhachSan, f => f.PickRandom(ks));
-            fakeKs.RuleFor(u => u.ThoiGianTao, f => f.Date.Between(new DateTime(2023, 1, 10), new DateTime(2023, 6, 30)));
             fakeKs.Rules((f, r) =>
             {
                 var chiPhiVao = f.Random.Int(1700000, 3000000);
@@ -121,12 +119,24 @@ namespace QLKS.Data.Seeders
                 r.TongChiPhi = chiPhiVao + chiPhiRa;
             });
 
-            var chiphi = fakeKs.Generate(100);
+            var chiPhis = new List<ChiPhi>();
+            var doanhthuCount = dt.Count;
 
-            _dbContext.ChiPhi.AddRange(chiphi);
+            for (int i = 0; i < doanhthuCount; i++)
+            {
+                var chiphi = fakeKs.Generate();
+                chiphi.ThoiGianTao = dt[i].ThoiGianTao;
+                chiphi.KhachSan = dt[i].KhachSan;
+
+                chiPhis.Add(chiphi);
+                await _dbContext.ChiPhi.AddAsync(chiphi);
+            }
+
+            //var chiphi = fakeKs.Generate(100);
+            //_dbContext.ChiPhi.AddRange(chiphi);
             await _dbContext.SaveChangesAsync();
 
-            return chiphi;
+            return chiPhis;
         }
 
         private async Task<List<DoanhThu>> AddDoanhThu(List<KhachSan> ks)
@@ -136,14 +146,21 @@ namespace QLKS.Data.Seeders
             fakeKs.RuleFor(u => u.TongDoanhThu, f => f.Random.Int(1700000, 3000000));
             fakeKs.RuleFor(u => u.KhachSan, f => f.PickRandom(ks));
             fakeKs.RuleFor(u => u.MoTa, f => f.Lorem.Paragraphs(3));
-            fakeKs.RuleFor(u => u.ThoiGianTao, f => f.Date.Between(new DateTime(2023, 1, 10), new DateTime(2023, 6, 30)));
+            fakeKs.RuleFor(u => u.ThoiGianTao, f => f.Date.Between(new DateTime(2018, 1, 1), new DateTime(2023, 12, 30)));
 
-            var doanhthu = fakeKs.Generate(500);
+            var ksCount = ks.Count;
+            var listDoanhthu = new List<DoanhThu>();
+            for (int i = 0; i < ksCount; i++)
+            {
+                var doanhthu = fakeKs.Generate(12);
+                doanhthu.ForEach(x => x.KhachSan = ks[i]);
+                listDoanhthu.AddRange(doanhthu);
+                _dbContext.DoanhThu.AddRange(doanhthu);
+            }
 
-            _dbContext.DoanhThu.AddRange(doanhthu);
             await _dbContext.SaveChangesAsync();
 
-            return doanhthu;
+            return listDoanhthu;
         }
 
         private async Task<List<KhachSan>> AddKs()

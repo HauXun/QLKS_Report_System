@@ -17,6 +17,8 @@ import { Button } from "primereact/button";
 import HotelIcon from "../../../assets/img/hotel.png";
 import RevenueDialog from "./dialogs/RevenueDialog/RevenueDialog";
 import ExpenseDialog from "./dialogs/ExpenseDialog/ExpenseDialog";
+import * as FileSaver from "file-saver";
+import * as XLSX from "xlsx";
 
 const lineChartOptions = {
 	chart: {
@@ -90,6 +92,10 @@ export default function StatisticalOfHotel() {
 	const iconBoxInside = useColorModeValue("white", "white");
 	const { id } = useParams();
 
+	const [exportData, setExportData] = useState({
+		revenue: [],
+		expense: [],
+	});
 	const [hotelInfo, setHotelInfo] = useState({});
 	const [revenueData, setRevenueData] = useState({
 		name: "Doanh thu",
@@ -116,20 +122,66 @@ export default function StatisticalOfHotel() {
 				if (revenue.isSuccess && revenue.result) {
 					setRevenueData((prevState) => ({
 						...prevState,
-						data: revenue.result.slice(0, 10).map((i) => i.tongDoanhThu),
+						data: revenue.result.map((i) => i.tongDoanhThu),
+					}));
+					setExportData((prevState) => ({
+						...prevState,
+						revenue: revenue.result,
 					}));
 				}
 
 				if (expense.isSuccess && expense.result) {
 					setExpenseData((prevState) => ({
 						...prevState,
-						data: expense.result.slice(0, 10).map((i) => i.tongChiPhi),
+						data: expense.result.map((i) => i.tongChiPhi),
+					}));
+					setExportData((prevState) => ({
+						...prevState,
+						expense: expense.result,
 					}));
 				}
 			}
 		);
 	}, []);
 
+	async function handleFilterByDate() {
+		// const params = new URLSearchParams({
+		// 	KhachSanId: id,
+		// 	FromDate: encodeURIComponent(dateFilter.fromDate.toLocaleDateString()),
+		// 	ToDate: encodeURIComponent(dateFilter.toDate.toLocaleDateString()),
+		// })
+		const revenue = await fetch(
+			`${
+				process.env.REACT_APP_API_URL
+			}/doanhthu?KhachSanId=${id}&FromDate=${encodeURIComponent(
+				dateFilter.fromDate.toLocaleDateString()
+			)}&ToDate=${encodeURIComponent(
+				dateFilter.toDate.toLocaleDateString()
+			)}`
+		).then((res) => res.json());
+		const expense = await fetch(
+			`${
+				process.env.REACT_APP_API_URL
+			}/chiphi?KhachSanId=${id}&FromDate=${encodeURIComponent(
+				dateFilter.fromDate.toLocaleDateString()
+			)}&ToDate=${encodeURIComponent(
+				dateFilter.toDate.toLocaleDateString()
+			)}`
+		).then((res) => res.json());
+
+		if (revenue.isSuccess && revenue.result) {
+			setRevenueData((prevState) => ({
+				...prevState,
+				data: revenue.result.map((i) => i.tongDoanhThu),
+			}));
+		}
+		if (expense.isSuccess && expense.result) {
+			setExpenseData((prevState) => ({
+				...prevState,
+				data: expense.result.map((i) => i.tongChiPhi),
+			}));
+		}
+	}
 	function handleOpenRevenueDialog() {
 		setRevenueDialogVisible(true);
 	}
@@ -140,11 +192,13 @@ export default function StatisticalOfHotel() {
 		if (revenueData.data) {
 			return revenueData.data.reduce((a, b) => a + b, 0);
 		}
+		return 0;
 	}
 	function getTotalExpense() {
 		if (expenseData.data) {
 			return expenseData.data.reduce((a, b) => a + b, 0);
 		}
+		return 0;
 	}
 	async function getHotelInfo() {
 		const res = await fetch(
@@ -163,6 +217,28 @@ export default function StatisticalOfHotel() {
 			`${process.env.REACT_APP_API_URL}/chiphi?KhachSanId=${id}`
 		);
 		return await res.json();
+	}
+	function handleExportData() {
+		if (!exportData) return;
+
+		const fileType =
+			"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
+		const fileExtension = ".xlsx";
+		const fileName = "du_lieu_thong_ke";
+
+		const revenueWs = XLSX.utils.json_to_sheet(exportData.revenue);
+		const expenseWs = XLSX.utils.json_to_sheet(exportData.expense);
+
+		const wb = {
+			Sheets: { revenue: revenueWs, expense: expenseWs },
+			SheetNames: ["revenue", "expense"],
+		};
+		const excelBuffer = XLSX.write(wb, {
+			bookType: "xlsx",
+			type: "array",
+		});
+		const data = new Blob([excelBuffer], { type: fileType });
+		FileSaver.saveAs(data, fileName + fileExtension);
 	}
 
 	return (
@@ -370,6 +446,7 @@ export default function StatisticalOfHotel() {
 							}}
 							label="Lọc dữ liệu"
 							size="small"
+							onClick={handleFilterByDate}
 						/>
 					</div>
 					<div
@@ -430,9 +507,10 @@ export default function StatisticalOfHotel() {
 								style={{
 									width: "max-content",
 								}}
-								label="Xuất thông tin"
+								label="Xuất dữ liệu"
 								size="small"
 								outlined
+								onClick={handleExportData}
 							/>
 							<Link to="/admin/dashboard">
 								<Button

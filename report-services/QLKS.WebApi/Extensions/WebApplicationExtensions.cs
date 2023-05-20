@@ -28,7 +28,7 @@ public static class WebApplicationExtensions
         builder.Services.AddDbContext<ReportDbContext>(options =>
         {
             options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
-        });
+        }, ServiceLifetime.Transient);
 
         builder.Services.AddScoped<IReportRepository, ReportRepository>();
 
