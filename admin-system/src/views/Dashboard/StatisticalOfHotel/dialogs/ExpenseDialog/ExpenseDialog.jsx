@@ -9,23 +9,25 @@ import { Paginator } from "primereact/paginator";
 ExpenseDialog.propTypes = {
 	visible: PropTypes.bool.isRequired,
 	setVisible: PropTypes.func.isRequired,
-	item: PropTypes.object,
+	hotelInfo: PropTypes.object,
+	params: PropTypes.object,
 };
 
 ExpenseDialog.defaultProps = {
-	item: {},
+	hotelInfo: {},
+	params: {},
 };
 
-function ExpenseDialog({ visible, setVisible, item }) {
+function ExpenseDialog({ visible, setVisible, hotelInfo, params }) {
 	//? States
 	const [tableData, setTableData] = useState([]);
 	const [selectedItem, setSelectedItem] = useState(null);
 
 	const handleGetTableData = () => {
-		if (item) {
+		if (hotelInfo) {
 			(async () => {
 				const res = await fetch(
-					`${process.env.REACT_APP_API_URL}/chiphi?KhachSanId=${item.id}`
+					`${process.env.REACT_APP_API_URL}/chiphi?KhachSanId=${hotelInfo.id}&${params}`
 				);
 				const data = await res.json();
 				if (data.isSuccess && data.result) {

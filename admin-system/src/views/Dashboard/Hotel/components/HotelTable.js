@@ -41,8 +41,8 @@ const HotelTable = ({ title, captions, data }) => {
 						</Tr>
 					</Thead>
 					<Tbody>
-						{data.map((row) => {
-							return <HotelItem key={row.id} {...row} />;
+						{data.map((row, index) => {
+							return <HotelItem {...row} />;
 						})}
 					</Tbody>
 				</Table>

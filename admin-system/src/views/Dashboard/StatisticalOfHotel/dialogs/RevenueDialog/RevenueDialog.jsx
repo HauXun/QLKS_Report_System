@@ -9,23 +9,25 @@ import { Paginator } from "primereact/paginator";
 RevenueDialog.propTypes = {
 	visible: PropTypes.bool.isRequired,
 	setVisible: PropTypes.func.isRequired,
-	item: PropTypes.object,
+	hotelInfo: PropTypes.object,
+	params: PropTypes.object,
 };
 
 RevenueDialog.defaultProps = {
-	item: {},
+	hotelInfo: {},
+	params: {},
 };
 
-function RevenueDialog({ visible, setVisible, item }) {
+function RevenueDialog({ visible, setVisible, hotelInfo, params }) {
 	//? States
 	const [tableData, setTableData] = useState([]);
 	const [selectedItem, setSelectedItem] = useState(null);
 
 	const handleGetTableData = () => {
-		if (item) {
+		if (hotelInfo) {
 			(async () => {
 				const res = await fetch(
-					`${process.env.REACT_APP_API_URL}/doanhthu?KhachSanId=${item.id}`
+					`${process.env.REACT_APP_API_URL}/doanhthu?KhachSanId=${hotelInfo.id}&${params}`
 				);
 				const data = await res.json();
 				if (data.isSuccess && data.result) {

@@ -89,9 +89,10 @@ const lineChartOptions = {
 };
 
 export default function StatisticalOfHotel() {
-	const iconBoxInside = useColorModeValue("white", "white");
 	const { id } = useParams();
+	const iconBoxInside = useColorModeValue("white", "white");
 
+	const [fetchParams, setFetchParams] = useState({});
 	const [exportData, setExportData] = useState({
 		revenue: [],
 		expense: [],
@@ -113,80 +114,56 @@ export default function StatisticalOfHotel() {
 	const [expenseDialogVisible, setExpenseDialogVisible] = useState(false);
 
 	useEffect(() => {
-		Promise.all([getHotelInfo(), getRevenue(), getExpense()]).then(
-			([hotelInfo, revenue, expense]) => {
-				if (hotelInfo.isSuccess && hotelInfo.result) {
-					setHotelInfo(hotelInfo.result);
-				}
-
-				if (revenue.isSuccess && revenue.result) {
+		getHotelInfo().then((hotelInfoRes) => {
+			if (hotelInfoRes.isSuccess && hotelInfoRes.result) {
+				setHotelInfo(hotelInfoRes.result);
+			}
+		});
+	}, []);
+	useEffect(() => {
+		Promise.all([getRevenue(fetchParams), getExpense(fetchParams)]).then(
+			([revenueRes, expenseRes]) => {
+				if (revenueRes.isSuccess && revenueRes.result) {
 					setRevenueData((prevState) => ({
 						...prevState,
-						data: revenue.result.map((i) => i.tongDoanhThu),
+						data: revenueRes.result.map((i) => i.tongDoanhThu),
 					}));
 					setExportData((prevState) => ({
 						...prevState,
-						revenue: revenue.result,
+						revenue: revenueRes.result,
 					}));
 				}
-
-				if (expense.isSuccess && expense.result) {
+				if (expenseRes.isSuccess && expenseRes.result) {
 					setExpenseData((prevState) => ({
 						...prevState,
-						data: expense.result.map((i) => i.tongChiPhi),
+						data: expenseRes.result.map((i) => i.tongChiPhi),
 					}));
 					setExportData((prevState) => ({
 						...prevState,
-						expense: expense.result,
+						expense: expenseRes.result,
 					}));
 				}
 			}
 		);
-	}, []);
+	}, [fetchParams]);
 
-	async function handleFilterByDate() {
-		// const params = new URLSearchParams({
-		// 	KhachSanId: id,
-		// 	FromDate: encodeURIComponent(dateFilter.fromDate.toLocaleDateString()),
-		// 	ToDate: encodeURIComponent(dateFilter.toDate.toLocaleDateString()),
-		// })
-		const revenue = await fetch(
-			`${
-				process.env.REACT_APP_API_URL
-			}/doanhthu?KhachSanId=${id}&FromDate=${encodeURIComponent(
-				dateFilter.fromDate.toLocaleDateString()
-			)}&ToDate=${encodeURIComponent(
-				dateFilter.toDate.toLocaleDateString()
-			)}`
-		).then((res) => res.json());
-		const expense = await fetch(
-			`${
-				process.env.REACT_APP_API_URL
-			}/chiphi?KhachSanId=${id}&FromDate=${encodeURIComponent(
-				dateFilter.fromDate.toLocaleDateString()
-			)}&ToDate=${encodeURIComponent(
-				dateFilter.toDate.toLocaleDateString()
-			)}`
-		).then((res) => res.json());
-
-		if (revenue.isSuccess && revenue.result) {
-			setRevenueData((prevState) => ({
-				...prevState,
-				data: revenue.result.map((i) => i.tongDoanhThu),
-			}));
-		}
-		if (expense.isSuccess && expense.result) {
-			setExpenseData((prevState) => ({
-				...prevState,
-				data: expense.result.map((i) => i.tongChiPhi),
-			}));
-		}
+	async function getHotelInfo() {
+		const res = await fetch(
+			`${process.env.REACT_APP_API_URL}/khachsan/${id}`
+		);
+		return await res.json();
 	}
-	function handleOpenRevenueDialog() {
-		setRevenueDialogVisible(true);
+	async function getRevenue(params) {
+		const res = await fetch(
+			`${process.env.REACT_APP_API_URL}/doanhthu?KhachSanId=${id}&${params}`
+		);
+		return await res.json();
 	}
-	function handleOpenExpenseDialog() {
-		setExpenseDialogVisible(true);
+	async function getExpense(params) {
+		const res = await fetch(
+			`${process.env.REACT_APP_API_URL}/chiphi?KhachSanId=${id}&${params}`
+		);
+		return await res.json();
 	}
 	function getTotalRevenue() {
 		if (revenueData.data) {
@@ -200,23 +177,30 @@ export default function StatisticalOfHotel() {
 		}
 		return 0;
 	}
-	async function getHotelInfo() {
-		const res = await fetch(
-			`${process.env.REACT_APP_API_URL}/khachsan/${id}`
-		);
-		return await res.json();
+	async function handleFilterByDate() {
+		if (dateFilter.fromDate && dateFilter.toDate) {
+			const params = Object.entries({
+				FromDate: dateFilter.fromDate.toLocaleDateString(),
+				ToDate: dateFilter.toDate.toLocaleDateString(),
+			})
+				.map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
+				.join("&");
+
+			setFetchParams(params);
+		}
 	}
-	async function getRevenue() {
-		const res = await fetch(
-			`${process.env.REACT_APP_API_URL}/doanhthu?KhachSanId=${id}`
-		);
-		return await res.json();
+	function handleRefreshData() {
+		setDateFilter({
+			fromDate: null,
+			toDate: null,
+		});
+		setFetchParams({});
 	}
-	async function getExpense() {
-		const res = await fetch(
-			`${process.env.REACT_APP_API_URL}/chiphi?KhachSanId=${id}`
-		);
-		return await res.json();
+	function handleOpenRevenueDialog() {
+		setRevenueDialogVisible(true);
+	}
+	function handleOpenExpenseDialog() {
+		setExpenseDialogVisible(true);
 	}
 	function handleExportData() {
 		if (!exportData) return;
@@ -246,12 +230,14 @@ export default function StatisticalOfHotel() {
 			<RevenueDialog
 				visible={revenueDialogVisible}
 				setVisible={setRevenueDialogVisible}
-				item={hotelInfo}
+				hotelInfo={hotelInfo}
+				params={fetchParams}
 			/>
 			<ExpenseDialog
 				visible={expenseDialogVisible}
 				setVisible={setExpenseDialogVisible}
-				item={hotelInfo}
+				hotelInfo={hotelInfo}
+				params={fetchParams}
 			/>
 			<Flex flexDirection="column" pt={{ base: "120px", md: "75px" }}>
 				<Card>
@@ -440,14 +426,27 @@ export default function StatisticalOfHotel() {
 								showIcon
 							/>
 						</SimpleGrid>
-						<Button
+						<div
 							style={{
 								marginTop: "16px",
 							}}
-							label="Lọc dữ liệu"
-							size="small"
-							onClick={handleFilterByDate}
-						/>
+						>
+							<Button
+								label="Lọc dữ liệu"
+								size="small"
+								onClick={handleFilterByDate}
+							/>
+							<Button
+								style={{
+									marginLeft: "8px",
+								}}
+								label="Tải lại dữ liệu"
+								size="small"
+								severity="secondary"
+								outlined
+								onClick={handleRefreshData}
+							/>
+						</div>
 					</div>
 					<div
 						style={{
@@ -482,7 +481,7 @@ export default function StatisticalOfHotel() {
 								}}
 								label="Xem danh sách doanh thu"
 								size="small"
-								outlined
+								severity="info"
 								onClick={handleOpenRevenueDialog}
 							/>
 							<Button
@@ -492,7 +491,7 @@ export default function StatisticalOfHotel() {
 								}}
 								label="Xem danh sách chi phí"
 								size="small"
-								outlined
+								severity="info"
 								onClick={handleOpenExpenseDialog}
 							/>
 						</div>
