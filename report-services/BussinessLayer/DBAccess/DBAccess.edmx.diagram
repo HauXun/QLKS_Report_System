@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="b55f3ed42c5e4befa79a009b1206869d" Name="Diagram1">
+        <EntityTypeShape EntityType="QLKS_SystemModel.ChiPhi" Width="1.5" PointX="3" PointY="4.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="QLKS_SystemModel.DoanhThu" Width="1.5" PointX="3" PointY="8" IsExpanded="true" />
+        <EntityTypeShape EntityType="QLKS_SystemModel.HDDanhGia" Width="1.5" PointX="3.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="QLKS_SystemModel.HDKhachHang" Width="1.5" PointX="3.75" PointY="11.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="QLKS_SystemModel.HDNhanVien" Width="1.5" PointX="3.75" PointY="14.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="QLKS_SystemModel.HDPhong" Width="1.5" PointX="3.75" PointY="17.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="QLKS_SystemModel.HoatDong" Width="1.5" PointX="6" PointY="5.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="QLKS_SystemModel.KhachSan" Width="1.5" PointX="0.75" PointY="6.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="QLKS_SystemModel.sysdiagram" Width="1.5" PointX="5.75" PointY="1.625" IsExpanded="true" />
+        <AssociationConnector Association="QLKS_SystemModel.FK__ChiPhi__KhachSan__45F365D3" ManuallyRouted="false" />
+        <AssociationConnector Association="QLKS_SystemModel.FK__DoanhThu__KhachS__44FF419A" ManuallyRouted="false" />
+        <AssociationConnector Association="QLKS_SystemModel.FK__HoatDong__HDDanh__4AB81AF0" ManuallyRouted="false" />
+        <AssociationConnector Association="QLKS_SystemModel.FK__HoatDong__HDKhac__47DBAE45" ManuallyRouted="false" />
+        <AssociationConnector Association="QLKS_SystemModel.FK__HoatDong__HDNhan__49C3F6B7" ManuallyRouted="false" />
+        <AssociationConnector Association="QLKS_SystemModel.FK__HoatDong__HDPhon__48CFD27E" ManuallyRouted="false" />
+        <AssociationConnector Association="QLKS_SystemModel.FK__HoatDong__KhachS__46E78A0C" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Extensions\" />
+    <Folder Include="Media\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\QLKS.Core\QLKS.Core.csproj" />
+    <ProjectReference Include="..\QLKS.Data\QLKS.Data.csproj" />
+  </ItemGroup>
+
+</Project>
